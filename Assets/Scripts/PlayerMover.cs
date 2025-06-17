@@ -1,38 +1,44 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerMover : MonoBehaviour {
-    
-    //3D movement
-    public float speed = 5f;
+[RequireComponent(typeof(Rigidbody))]
+public class PlayerMover : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f;
+    public float sprintMultiplier = 2f;
+    public bool allowSprint = true;
 
     private Rigidbody _rb;
-    private Vector3 _movement;
-    private float _initialSpeed;
+    private Vector3 _inputDirection;
+    private bool _isSprinting;
 
-    private void Awake() {
+    private void Awake()
+    {
         _rb = GetComponent<Rigidbody>();
-        _initialSpeed = speed;
     }
 
-    private void Update() {
-        // Get input from the user
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");
-        float moveVertical = Input.GetAxisRaw("Vertical");
+    private void Update()
+    {
+        // Get raw movement input
+        float inputX = Input.GetAxisRaw("Horizontal");
+        float inputZ = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(KeyCode.LeftShift)) {
-            speed = _initialSpeed * 2; // Double the speed when holding left shift
-        }
-        else {
-            speed = _initialSpeed; // Reset to initial speed when not holding left shift
-        }
+        // Convert input to world-space direction
+        _inputDirection = (transform.right * inputX + transform.forward * inputZ).normalized;
+        // _inputDirection = new Vector3(Input.GetAxis("Horizontal"), 0 ,Input.GetAxis("Vertical")).normalized;
 
-        // Normalize the vector to ensure consistent speed in all directions
-        _movement = (transform.right * moveHorizontal + transform.forward * moveVertical).normalized;        // Move the player
+
+        // Sprint toggle
+        _isSprinting = allowSprint && Input.GetKey(KeyCode.LeftShift);
     }
 
-    void FixedUpdate() {
-        
-        _rb.MovePosition(transform.position + _movement * speed * Time.deltaTime);
+    private void FixedUpdate()
+    {
+        // Determine final movement speed
+        float currentSpeed = _isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
+
+        // Move using Rigidbody.MovePosition
+        Vector3 targetPosition = _inputDirection * currentSpeed * Time.fixedDeltaTime;
+        _rb.velocity = new Vector3(targetPosition.x, _rb.velocity.y, targetPosition.z);
     }
 }

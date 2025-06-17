@@ -127,7 +127,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2497133297025130637}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -143,9 +143,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &4426706804424911026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,7 +158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba062ef3f8ce4a2998f6db28b7bb9a19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  moveSpeed: 300
+  sprintMultiplier: 2
+  allowSprint: 1
 --- !u!114 &890982969316500600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,6 +189,7 @@ GameObject:
   - component: {fileID: 1037895405064280885}
   - component: {fileID: 2887293610781345908}
   - component: {fileID: 2579139337199220038}
+  - component: {fileID: 8872594761960619076}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -276,7 +279,30 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.7, y: 1.8, z: 0.7}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &8872594761960619076
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8124032729937683108}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 1.9999999
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.000000059604645, z: 0}
