@@ -1,7 +1,8 @@
 ﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerLook : MonoBehaviour {
+public class PlayerLook : NetworkBehaviour {
 
     public static event Action<GameObject> OnSawObject;
     
@@ -14,6 +15,9 @@ public class PlayerLook : MonoBehaviour {
     private float _xRotation = 0f;
 
     void Update() {
+        if (!IsOwner) {
+            return; // Only the owner of the player can control the look
+        }
         // Get mouse input
         float mouseX = Input.GetAxis("Mouse X") * lookSpeed;
         float mouseY = Input.GetAxis("Mouse Y") * lookSpeed;

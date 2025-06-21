@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using Unity.Netcode;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMover : MonoBehaviour
-{
+public class PlayerMover : NetworkBehaviour {
+    
+    [SerializeField] private Camera cam;
+    
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float sprintMultiplier = 2f;
@@ -12,13 +15,30 @@ public class PlayerMover : MonoBehaviour
     private Vector3 _inputDirection;
     private bool _isSprinting;
 
-    private void Awake()
-    {
+    private void Awake() {
+        if (_rb != null) {
+            Debug.LogError("Rigidbody already assigned.");
+            return;
+        }
         _rb = GetComponent<Rigidbody>();
+    }
+
+    public override void OnNetworkSpawn() {
+        if (!IsOwner) {
+            // Disable the camera for non-owners
+            if (cam != null) {
+                cam.gameObject.SetActive(false);
+            }
+        } 
     }
 
     private void Update()
     {
+        if (!IsOwner)
+        {
+            // If this player is not the owner, skip input processing
+            return;
+        }
         // Get raw movement input
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputZ = Input.GetAxisRaw("Vertical");
@@ -34,6 +54,11 @@ public class PlayerMover : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsOwner)
+        {
+            // If this player is not the owner, skip movement
+            return;
+        }
         // Determine final movement speed
         float currentSpeed = _isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
 
