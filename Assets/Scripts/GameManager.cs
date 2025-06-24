@@ -22,7 +22,10 @@ public class GameManager : NetworkBehaviour {
                 Debug.LogError("Slender prefab not found in Resources folder.");
                 return;
             }
-            Instantiate(slenderPrefab);
+            
+            var slender = Instantiate(slenderPrefab);
+            NetworkObject aiNetworkObject = slender.GetComponent<NetworkObject>();
+            aiNetworkObject.Spawn();
         } 
     }
 
