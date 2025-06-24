@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -47,7 +48,9 @@ public class Slender : NetworkBehaviour {
             return;
         }
 
-        var players = FindObjectsByType<PlayerMover>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
+        var players = FindObjectsByType<PlayerMover>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        players = players.OrderBy(player => player.transform.position.z).ToArray();
+        
         if (players.Length == 0) {
             _animator.Play("Idle");
             return;

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameUI : NetworkBehaviour {
 
+    [SerializeField] private TMP_Text fpsTMP;
     [SerializeField] private TMP_Text logTMP;
 
     public override void OnNetworkSpawn() {
@@ -32,6 +33,12 @@ public class GameUI : NetworkBehaviour {
     
     public void Clear() {
         logTMP.text = "";
+    }
+    
+    private void Update() {
+        if (fpsTMP != null) {
+            fpsTMP.text = $"FPS: {Mathf.Round(1f / Time.deltaTime)}";
+        }
     }
     
 }
