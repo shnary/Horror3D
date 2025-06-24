@@ -30,7 +30,7 @@ public class PlayerLook : NetworkBehaviour {
         playerCamera.transform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
         
         // Rotate the player body horizontally
-        playerBody.Rotate(Vector3.up * mouseX);
+        playerBody.Rotate(Vector3.up * mouseX * Time.deltaTime * 300);
         
         bool found = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, rayDistance);
         // If nothing is hit, invoke with null
