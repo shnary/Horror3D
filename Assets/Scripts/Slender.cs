@@ -49,27 +49,22 @@ public class Slender : NetworkBehaviour {
         }
 
         var players = FindObjectsByType<PlayerMover>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-        players = players.OrderBy(player => player.transform.position.z).ToArray();
+        var player = players.OrderBy(player => player.transform.position.z).FirstOrDefault();
         
-        if (players.Length == 0) {
+        if (player == null) {
             _animator.Play("Idle");
             return;
         }
-        foreach (var player in players) {
-
-            transform.position += (player.transform.position - transform.position).normalized * Time.deltaTime * 5f;
-            transform.LookAt(player.transform.position);
-            if (Vector3.Distance(player.transform.position, transform.position) < 1.5f) {
-                _animator.Play("Scream");
-                _currentState = State.Screaming;
-            }
-            else {
-                _animator.Play("Walk");
-                
-            }
-
-        }
         
-
+        transform.position += (player.transform.position - transform.position).normalized * Time.deltaTime * 5f;
+        transform.LookAt(player.transform.position);
+        if (Vector3.Distance(player.transform.position, transform.position) < 1.5f) {
+            _animator.Play("Scream");
+            _currentState = State.Screaming;
+        }
+        else {
+            _animator.Play("Walk");
+            
+        }
     }
 }
