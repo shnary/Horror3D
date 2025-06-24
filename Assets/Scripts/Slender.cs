@@ -35,7 +35,6 @@ public class Slender : NetworkBehaviour {
 
     private void Update() {
         
-        if (!IsOwner) return;
         if (_currentState == State.Screaming) {
             // If Slender is screaming, do not move
             
