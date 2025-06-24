@@ -1174,8 +1174,8 @@ GameObject:
   - component: {fileID: 6957573965259036736}
   - component: {fileID: 2891481974308657385}
   - component: {fileID: 9019932169736064591}
+  - component: {fileID: 8236761791010533544}
   - component: {fileID: 7085709555611223433}
-  - component: {fileID: 1534746904166224737}
   - component: {fileID: 6921734155728441432}
   m_Layer: 0
   m_Name: Slender
@@ -1339,7 +1339,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &7085709555611223433
+--- !u!114 &8236761791010533544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1348,21 +1348,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4061999138098054953}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 6957573965259036736}
---- !u!114 &1534746904166224737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4061999138098054953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3cc169b1cefba142a405d64016394cb, type: 3}
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UseUnreliableDeltas: 0
@@ -1381,9 +1367,23 @@ MonoBehaviour:
   UseQuaternionSynchronization: 0
   UseQuaternionCompression: 0
   UseHalfFloatPrecision: 0
-  InLocalSpace: 0
+  InLocalSpace: 1
   Interpolate: 0
   SlerpPosition: 0
+--- !u!114 &7085709555611223433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4061999138098054953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 6957573965259036736}
 --- !u!114 &6921734155728441432
 MonoBehaviour:
   m_ObjectHideFlags: 0

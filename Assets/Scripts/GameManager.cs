@@ -1,9 +1,12 @@
 using System;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour {
+
+    private string _host = "192.168.1.108";
     
     public override void OnNetworkSpawn() {
         if (IsOwner) {
@@ -27,8 +30,15 @@ public class GameManager : NetworkBehaviour {
         bool hostButton = GUILayout.Button("Host");
         bool clientButton = GUILayout.Button("Client");
         bool disconnectButton = GUILayout.Button("Disconnect");
+
+        _host = GUILayout.TextArea(_host);
         
         if (hostButton) {
+            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+            if (transport != null) {
+                transport.SetConnectionData(_host, 7777);
+            }
+            
             NetworkManager.Singleton.StartHost();
         }
         if (clientButton) {
