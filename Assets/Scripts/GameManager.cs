@@ -17,10 +17,6 @@ public class GameManager : NetworkBehaviour {
         if (Instance == null) {
             Instance = this;
         } 
-        
-        if (NetworkManager.Singleton == null) {
-            Debug.LogError("NetworkManager is not set up in the scene.");
-        }
     }
 
     private void Start() {
@@ -43,8 +39,6 @@ public class GameManager : NetworkBehaviour {
         if (IsOwner) {
             SceneManager.LoadScene("PlayerUI", LoadSceneMode.Additive);
             
-            return;
-
             GameObject slenderPrefab = Resources.Load<GameObject>("Slender");
             if (slenderPrefab == null) {
                 Debug.LogError("Slender prefab not found in Resources folder.");
