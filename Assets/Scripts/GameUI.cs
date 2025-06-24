@@ -11,12 +11,14 @@ public class GameUI : NetworkBehaviour {
     public override void OnNetworkSpawn() {
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+        GameManager.Instance.CollectedPages.OnValueChanged += GameManager_CollectedPagesChanged;
     }
 
     private void OnDisable() {
         if (NetworkManager.Singleton == null) return;
         NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+        GameManager.Instance.CollectedPages.OnValueChanged -= GameManager_CollectedPagesChanged;
     }
 
     private void OnClientConnected(ulong clientId) {
@@ -25,6 +27,13 @@ public class GameUI : NetworkBehaviour {
     
     private void OnClientDisconnected(ulong clientId) {
         Add($"Client <color=red>{clientId}</color> disconnected.");
+    }
+    
+    private void GameManager_CollectedPagesChanged(int previousValue, int newValue) {
+        Add($"Collected pages: {newValue}");
+        if (newValue >= GameManager.TotalPages) {
+            Add("All pages collected! You have won!");
+        }
     }
 
     public void Add(string msg) {

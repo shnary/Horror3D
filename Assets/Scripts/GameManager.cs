@@ -6,16 +6,44 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour {
 
+    public const int TotalPages = 5;
+    
+    public static GameManager Instance { get; private set; }
+
+    public NetworkVariable<int> CollectedPages = new NetworkVariable<int>(0);
     private string _host = "192.168.1.108";
     
+    private void Awake() {
+        if (Instance == null) {
+            Instance = this;
+        } 
+        
+        if (NetworkManager.Singleton == null) {
+            Debug.LogError("NetworkManager is not set up in the scene.");
+        }
+    }
+
+    private void Start() {
+#if !UNITY_EDITOR
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+#endif
+    }
+
+    private void Update() {
+#if !UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Cursor.visible = !Cursor.visible;
+            Cursor.lockState = Cursor.visible ? CursorLockMode.None : CursorLockMode.Locked;
+        }
+#endif
+    }
+
     public override void OnNetworkSpawn() {
         if (IsOwner) {
             SceneManager.LoadScene("PlayerUI", LoadSceneMode.Additive);
-
-            #if !UNITY_EDITOR
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            #endif
+            
+            return;
 
             GameObject slenderPrefab = Resources.Load<GameObject>("Slender");
             if (slenderPrefab == null) {
@@ -27,6 +55,21 @@ public class GameManager : NetworkBehaviour {
             NetworkObject aiNetworkObject = slender.GetComponent<NetworkObject>();
             aiNetworkObject.Spawn();
         } 
+    }
+    
+    public void LoadJumpscareScene() {
+        SceneManager.LoadScene("Jumpscare", LoadSceneMode.Single);
+    }
+    
+    public void CollectPage() {
+        CollectedPages.Value++;
+        if (CollectedPages.Value >= TotalPages) {
+            var slender = FindAnyObjectByType<Slender>();
+            if (slender != null) {
+                slender.GetComponent<NetworkObject>().Despawn(false);
+                slender.gameObject.SetActive(false);
+            }
+        }
     }
 
     private void OnGUI() {

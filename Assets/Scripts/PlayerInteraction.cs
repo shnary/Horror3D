@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerInteraction : NetworkBehaviour {
     
-    public static event Action OnInteract;
+    public event Action<GameObject> OnInteract;
 
     private void Update() {
         if (!IsOwner) {
@@ -16,7 +16,12 @@ public class PlayerInteraction : NetworkBehaviour {
     }
     
     private void Interact() {
-        OnInteract?.Invoke();
-        Debug.Log("Interacted with object");
+        var cam = GetComponent<PlayerLook>().playerCamera;
+        bool found = Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, 5);
+        if (!found) {
+            return; // No object to interact with
+        }
+        print(hit.collider.gameObject.name);
+        OnInteract?.Invoke(hit.collider.gameObject);
     }
 }

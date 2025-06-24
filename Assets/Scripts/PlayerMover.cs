@@ -66,4 +66,8 @@ public class PlayerMover : NetworkBehaviour {
         Vector3 targetPosition = _inputDirection * currentSpeed * Time.fixedDeltaTime;
         _rb.velocity = new Vector3(targetPosition.x, _rb.velocity.y, targetPosition.z);
     }
+
+    public void OpenJumpscareScene() {
+        FindAnyObjectByType<GameManager>().LoadJumpscareScene();
+    }
 }

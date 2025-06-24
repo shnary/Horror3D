@@ -61,6 +61,7 @@ public class Slender : NetworkBehaviour {
         if (Vector3.Distance(player.transform.position, transform.position) < 1.5f) {
             _animator.Play("Scream");
             _currentState = State.Screaming;
+            player.OpenJumpscareScene();
         }
         else {
             _animator.Play("Walk");
