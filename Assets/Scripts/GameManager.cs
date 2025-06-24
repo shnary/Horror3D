@@ -9,7 +9,7 @@ public class GameManager : NetworkBehaviour {
         if (IsOwner) {
             SceneManager.LoadScene("PlayerUI", LoadSceneMode.Additive);
 
-            #if !DEBUG
+            #if !UNITY_EDITOR
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             #endif
