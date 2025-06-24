@@ -52,6 +52,7 @@ public class GameManager : NetworkBehaviour {
     }
     
     public void LoadJumpscareScene() {
+        // NetworkManager.Singleton.SceneManager.LoadScene("Jumpscare", LoadSceneMode.Single);
         SceneManager.LoadScene("Jumpscare", LoadSceneMode.Single);
     }
     
