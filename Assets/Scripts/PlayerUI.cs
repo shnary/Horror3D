@@ -6,7 +6,6 @@ public class PlayerUI : MonoBehaviour {
 
     [SerializeField] private TMP_Text objectNameTMP;
     
-    
     private void OnEnable() {
         PlayerLook.OnSawObject += PlayerLook_OnSawObject;   
     }
@@ -16,6 +15,8 @@ public class PlayerUI : MonoBehaviour {
     }
 
     private void PlayerLook_OnSawObject(GameObject obj) {
+        #if DEBUG
         objectNameTMP.text = obj != null ? obj.name : ""; 
+        #endif
     }
 }
