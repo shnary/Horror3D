@@ -309,8 +309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167b7e39eb2d11947817d43b155aa18f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlPanel: {fileID: 3022936267422161446, guid: d76bad6842caaa344adf34b555a11156, type: 3}
-  toggleKey: 104
 --- !u!114 &33837421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2082,9 +2080,9 @@ MonoBehaviour:
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
-    Address: 192.168.1.108
+    Address: 127.0.0.1
     Port: 7777
-    ServerListenAddress: 0.0.0.0
+    ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
