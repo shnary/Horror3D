@@ -1,8 +1,10 @@
 using System;
+using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : NetworkBehaviour {
 
@@ -10,13 +12,53 @@ public class GameManager : NetworkBehaviour {
     
     public static GameManager Instance { get; private set; }
 
+    [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private TMP_InputField ipInputField;
+    [SerializeField] private Button hostButton;
+    [SerializeField] private Button clientButton;
+
     public NetworkVariable<int> CollectedPages = new NetworkVariable<int>(0);
-    private string _host = "192.168.1.108";
+    
+    public AudioClip pageCollectedSound;
+    public AudioClip flashlightSound;
+    
+    private string _host = "127.0.0.1"; // "192.168.1.108";
     
     private void Awake() {
         if (Instance == null) {
             Instance = this;
         } 
+        
+        hostButton.onClick.AddListener(() => {
+            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+            if (transport != null) {
+                try {
+                    transport.SetConnectionData(ipInputField.text, 7777);
+                }
+                catch (Exception e) {
+                    Debug.LogError($"Failed to set connection data: {e.Message}");
+                    return;
+                }
+            }
+
+            try {
+                NetworkManager.Singleton.StartHost();
+            }
+            catch (Exception e) {
+                Debug.LogError($"Failed to start host: {e.Message}");
+            }
+        });
+        
+        clientButton.onClick.AddListener(() => {
+            try {
+                NetworkManager.Singleton.StartClient();
+            }
+            catch (Exception e) {
+                Debug.LogError($"Failed to start client: {e.Message}");
+            }
+        });
+        
+        // NetworkManager.Singleton.Shutdown();
     }
 
     private void Start() {
@@ -37,6 +79,7 @@ public class GameManager : NetworkBehaviour {
 
     public override void OnNetworkSpawn() {
         if (IsOwner) {
+            mainMenuPanel.SetActive(false);
             SceneManager.LoadScene("PlayerUI", LoadSceneMode.Additive);
             
             GameObject slenderPrefab = Resources.Load<GameObject>("Slender");
@@ -53,11 +96,17 @@ public class GameManager : NetworkBehaviour {
     
     public void LoadJumpscareScene() {
         // NetworkManager.Singleton.SceneManager.LoadScene("Jumpscare", LoadSceneMode.Single);
-        SceneManager.LoadScene("Jumpscare", LoadSceneMode.Single);
+        SceneManager.LoadScene("Jumpscare", LoadSceneMode.Additive);
+        Invoke(nameof(RemoveJumpscareScene), 3f);
+    }
+
+    private void RemoveJumpscareScene() {
+        SceneManager.UnloadSceneAsync("Jumpscare");
     }
     
     public void CollectPage() {
         CollectedPages.Value++;
+        PlayPageCollectedSoundServerRpc();
         if (CollectedPages.Value >= TotalPages) {
             var slender = FindAnyObjectByType<Slender>();
             if (slender != null) {
@@ -66,27 +115,12 @@ public class GameManager : NetworkBehaviour {
             }
         }
     }
-
-    private void OnGUI() {
-        bool hostButton = GUILayout.Button("Host");
-        bool clientButton = GUILayout.Button("Client");
-        bool disconnectButton = GUILayout.Button("Disconnect");
-
-        _host = GUILayout.TextArea(_host);
-        
-        if (hostButton) {
-            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            if (transport != null) {
-                transport.SetConnectionData(_host, 7777);
-            }
-            
-            NetworkManager.Singleton.StartHost();
-        }
-        if (clientButton) {
-            NetworkManager.Singleton.StartClient();
-        }
-        if (disconnectButton) {
-            NetworkManager.Singleton.Shutdown();
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void PlayPageCollectedSoundServerRpc() {
+        if (pageCollectedSound != null) {
+            AudioSource.PlayClipAtPoint(pageCollectedSound, Camera.main.transform.position);
         }
     }
+
 }

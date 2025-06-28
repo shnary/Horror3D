@@ -13,6 +13,7 @@ public class Slender : NetworkBehaviour {
     private Animator _animator;
     private State _currentState = State.Walking;
     private float _stateTimer;
+    private Vector3 _initialPosition;
 
     private void Awake() {
         _stateTimer = 3f;
@@ -30,6 +31,7 @@ public class Slender : NetworkBehaviour {
                 Debug.LogError("SlenderSpawnLocation not found in the scene.");
                 return;
             }
+            _initialPosition = spawnLoc.transform.position;
             transform.position = spawnLoc.transform.position;
         }
     }
@@ -62,6 +64,7 @@ public class Slender : NetworkBehaviour {
             _animator.Play("Scream");
             _currentState = State.Screaming;
             player.OpenJumpscareScene();
+            transform.position = _initialPosition;
         }
         else {
             _animator.Play("Walk");

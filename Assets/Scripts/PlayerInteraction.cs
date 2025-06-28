@@ -10,7 +10,7 @@ public class PlayerInteraction : NetworkBehaviour {
         if (!IsOwner) {
             return; // Only the owner of the player can interact
         }
-        if (Input.GetKeyDown(KeyCode.E)) {
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0)) {
             Interact();
         }
     }
